@@ -13,6 +13,9 @@ import math
 import numpy as np
 
 ##### NEAREST NEIGHBOR INTERPOLATION METHODS #####
+def foobar():
+  pass
+
 
 def nearest_neighbor(signal: np.ndarray, newLen: tuple) -> np.ndarray:
   interval = (len(signal)-1)/(newLen-1)
@@ -21,21 +24,16 @@ def nearest_neighbor(signal: np.ndarray, newLen: tuple) -> np.ndarray:
     interpSignal[i] = signal[round(i*interval)]
   return interpSignal
 
-def nearest_neighbor2():
-  pass
-
-
-
-
+def nearest_neighbor2(img: np.ndarray, newShape: tuple) -> np.ndarray:
+  interpImg = np.zeros(newShape)
+  xInterval = (img.shape[1])/(newShape[1])
+  yInterval = (img.shape[0])/(newShape[0])
+  for y in range(newShape[0]):
+    for x in range(newShape[1]):
+      interpImg[y,x] = img[math.floor(y*yInterval), math.floor(x*xInterval)]
+  return interpImg
 
 ##### LINEAR INTERPOLATION METHODS #####
-
-
-
-
-
-
-
 
 
 ##### CUBIC INTERPOLATION METHODS #####
