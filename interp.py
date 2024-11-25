@@ -37,17 +37,52 @@ def linear(signal: np.ndarray, newLen: int) -> np.ndarray:
   interpSignal = np.zeros(newLen)
   for i in range(newLen):
     x = i*interval
-    x0 = np.floor(x)
-    x1 = np.ceil(x)
+    x0 = math.floor(x)
+    x1 = math.ceil(x)
     if x0 == x1:
-      interpSignal[i] = signal[int(x0)]
+      interpSignal[i] = signal[x0]
       continue
-    y0 = signal[int(x0)]
-    y1 = signal[int(x1)]
+    y0 = signal[x0]
+    y1 = signal[x1]
     interpSignal[i] = y0+(x-x0)*((y1-y0)/(x1-x0))
   return interpSignal
 
-def bilinear():
-  pass
+def bilinear_interp2(img, newShape):
+  xScale = newShape[1]/img.shape[1]
+  yScale = newShape[0]/img.shape[0]
+
+  tempArr = np.zeros((img.shape[0], newShape[1]))
+  for j in range(newShape[1]):
+    x = (j+0.5)*(1/xScale)-0.5
+    if x <= 0 or x >= img.shape[1]-1:
+      tempArr[:,j] = img[:,int(x)]
+      continue
+    x1 = math.floor(x)
+    x2 = math.ceil(x)
+    if (x1 == x2):
+      tempArr[:,j] = img[:,x1]
+      continue
+    for i in range(img.shape[0]):
+      term1 = (x2-x)/(x2-x1)*img[i,x1]
+      term2 = (x-x1)/(x2-x1)*img[i,x2]
+      tempArr[i,j] = term1 + term2
+
+  # Interpolate across columns
+  interpImg = np.zeros((newShape[0], newShape[1]))
+  for i in range(newShape[0]):
+    y = (i+0.5)*(1/yScale)-0.5
+    if y <= 0 or y >= img.shape[0]-1:
+      interpImg[i,:] = tempArr[int(y),:]
+      continue
+    y1 = math.floor(y)
+    y2 = math.ceil(y)
+    if (y1 == y2):
+      interpImg[i,:] = tempArr[y1,:]
+      continue
+    for j in range(newShape[1]):
+      term1 = (y2-y)/(y2-y1)*tempArr[y1,j]
+      term2 = (y-y1)/(y2-y1)*tempArr[y2,j]
+      interpImg[i,j] = term1 + term2
+  return interpImg
 
 ##### CUBIC INTERPOLATION METHODS #####
