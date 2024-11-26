@@ -63,9 +63,7 @@ def bilinear_interp2(img, newShape):
       tempArr[:,j] = img[:,x1]
       continue
     for i in range(img.shape[0]):
-      term1 = (x2-x)/(x2-x1)*img[i,x1]
-      term2 = (x-x1)/(x2-x1)*img[i,x2]
-      tempArr[i,j] = term1 + term2
+      tempArr[i,j] = (x2-x)*img[i,x1] + (x-x1)*img[i,x2]
 
   # Interpolate across columns
   interpImg = np.zeros((newShape[0], newShape[1]))
@@ -80,9 +78,7 @@ def bilinear_interp2(img, newShape):
       interpImg[i,:] = tempArr[y1,:]
       continue
     for j in range(newShape[1]):
-      term1 = (y2-y)/(y2-y1)*tempArr[y1,j]
-      term2 = (y-y1)/(y2-y1)*tempArr[y2,j]
-      interpImg[i,j] = term1 + term2
+      interpImg[i,j] = (y2-y)*tempArr[y1,j] + (y-y1)*tempArr[y2,j]
   return interpImg
 
 ##### CUBIC INTERPOLATION METHODS #####
