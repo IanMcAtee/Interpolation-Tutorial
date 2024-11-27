@@ -47,7 +47,7 @@ def linear(signal: np.ndarray, newLen: int) -> np.ndarray:
     interpSignal[i] = y0+(x-x0)*((y1-y0)/(x1-x0))
   return interpSignal
 
-def bilinear_interp2(img, newShape):
+def bilinear(img, newShape):
   xScale = newShape[1]/img.shape[1]
   yScale = newShape[0]/img.shape[0]
 
